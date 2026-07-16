@@ -27,8 +27,21 @@ function StudentForm({addStudent,editingStudent}){
         if(!StudentName) tempError.name="Name is Required";
         if(!StudentRegno) tempError.regno="Register number is Required";
         if(!Department) tempError.dept="Department is required";
-        if(!Age) tempError.age="Age is Required";
-        if(!Cgpa) tempError.cgpa="CGPA is Required";
+        if (!Age) {
+              tempError.age = "Age is Required";
+          } 
+        else if (Number(Age) < 16 || Number(Age) > 100) 
+          {
+            tempError.age = "Age must be between 16 and 100";
+          }
+        if (!Cgpa)
+           {
+              tempError.cgpa = "CGPA is Required";
+           } 
+        else if (Number(Cgpa) < 0 || Number(Cgpa) > 10) 
+           {
+             tempError.cgpa = "CGPA must be between 0 and 10";
+           }
         if(Object.keys(tempError).length>0)
         {
             setError(tempError);
