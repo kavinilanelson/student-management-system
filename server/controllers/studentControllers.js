@@ -33,6 +33,12 @@ async function addstudents(req,res)
     });
    }
    catch(error){
+     if (error.code === 11000) {
+        return res.status(400).json({
+            success: false,
+            message: "Register Number already exists."
+        });
+    }
     console.error(error);
     res.status(500).json({
         success:false,
@@ -47,7 +53,9 @@ async function updatestudents(req,res)
         const updatedStudent=await Student.findByIdAndUpdate(
             req.params.id,
             req.body,
-            {new:true}
+            {new:true,
+             runValidators: true
+            }
 
         );
         if(!updatedStudent)
@@ -63,6 +71,12 @@ async function updatestudents(req,res)
         });
     }
     catch(error){
+        if (error.code === 11000) {
+        return res.status(400).json({
+            success: false,
+            message: "Register Number already exists."
+        });
+    }
         res.status(500).json({
             success:false,
             message:error.message
