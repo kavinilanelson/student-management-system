@@ -7,7 +7,6 @@ import "./app.css";
 function App(){
  
   let [students,setStudents]=useState([]);
-  const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [editIndex,setEditIndex]=useState(-1);
@@ -24,8 +23,13 @@ function App(){
 
         setStudents(response.data.students);
     } catch (error) {
-        console.log(error);
-    } finally {
+    if (error.response && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
+    } else {
+        setErrorMessage("Something went wrong!");
+    }
+}
+   finally {
         setLoading(false);
     }
 }
@@ -53,6 +57,7 @@ function App(){
     sortedStudents.sort((a,b)=>Number(a.age)-Number(b.age));
   }
   async function addStudent(newStudent) {
+    setErrorMessage("");
     try {
 
         if (editingStudent) {
@@ -80,6 +85,7 @@ function App(){
     }
 }
   async function deleteStudent(index) {
+    setErrorMessage("");
     try {
         const student = students[index];
 
@@ -103,13 +109,16 @@ function App(){
     <div>
       <Header/>
   <StudentForm 
-        addStudent={addStudent}
-        editingStudent={editingStudent}
-  />
+    addStudent={addStudent}
+    editingStudent={editingStudent}
+    errorMessage={errorMessage}
+    setErrorMessage={setErrorMessage}
+/>
+  
   <p className="student-count">
     Total Students:{students.length}
   </p>
-  {errorMessage && <p className="error-message">{errorMessage}</p>}
+ 
   <div className="filter-container">
     <div className="filter-group">
   <label>Search Register Number</label>

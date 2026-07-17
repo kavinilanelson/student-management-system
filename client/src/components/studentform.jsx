@@ -1,6 +1,6 @@
 import {useState,useEffect} from "react";
 import "./studentform.css";
-function StudentForm({addStudent,editingStudent}){
+function StudentForm({addStudent, editingStudent, errorMessage, setErrorMessage}){
   const [isSubmitting, setIsSubmitting] = useState(false);
     const [StudentName,setStudentName]=useState("");
       const [StudentRegno,setStudentRegno]=useState("");
@@ -73,6 +73,7 @@ function StudentForm({addStudent,editingStudent}){
         setDepartment("");
         setAge("");
         setCgpa("");
+        
       }
        
     return(
@@ -93,11 +94,16 @@ function StudentForm({addStudent,editingStudent}){
       type="text"
       placeholder="Enter your Register Number"
        value={StudentRegno}
-       onChange={(e)=>setStudentRegno(e.target.value)}
+       onChange={(e)=>{
+        setStudentRegno(e.target.value);
+        setErrorMessage("");
+}}
+      
+       disabled={editingStudent}
        />
        </div>
         {error.regno && <p className="error">{error.regno}</p>}
-
+        {errorMessage && <p className="error">{errorMessage}</p>}
        <div className="form-row">
        <label>DEPARTMENT</label>
        <select
